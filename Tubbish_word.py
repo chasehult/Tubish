@@ -26,213 +26,78 @@ PROUNOUNCIATION={u"ā":"ay",u"â":"a",u"b":"b",u"d":"d",u"ē":"ee",u"ê":"e",
                  u"ñ":"ny",u"ō":"oh",u"ô":"o",u"ó":"oo",u"p":"p",u"r":"r",
                  u"ᵲ":"rr",u"s":"s",u"t":"t",u"ū":"oo",u"û":"u",u"v":"v",
                  u"w":"w",u"y":"y",u"z":"z",u"ʧ":"ch",u"ʃ":"sh",u"θ":"th",
+                 u"ᵲ":"rr",u"s":"s",u"t":"t",u"ū":"oo",u"û":"u",u"v":"v",
                  u"ð":"vth",u"ʊ":"uh"}
-SUBS={u"":"sk",u"▀":"sl",u"▁":"sn",u"▂":"st",u"▃":"sp",u"▄":"sm",
-          u"▅":"bl",u"▇":"kl",u"█":"br",u"▉":"fr",u"▊":"kr",u"▋":"gl",
-          u"▌":u"pl",u"▍":"gr",u"▎":"tr",u"▏":"pr",u"▐":"kw",u"▓":"ks"}                
+MIDDLESUBS={u"":u"bl",u"▀":u"fl",u"▁":u"dl",u"▂":u"gl",u"▃":u"pl",u"▄":u"ʃl",
+         u"▅":u"sl",u"▇":u"kl",u"█":u"br",u"▉":u"fr",u"▊":u"θr",u"▋":u"gr",
+          u"▌":u"pr",u"▍":u"tr",u"▎":"dw",u"▏":"gw",u"▐":"tw",u"▓":u"ʃw",
+          u"▔":u"θw", u"▕":"sw"}
+VCSUBS={u"▙":u"ûrp", u"▛":u"ûrb",u"⛄":u"ûmp", u"〶":u"ód☃l"}
+ENDSUBS={u"▗":u"☃rt", u"▘":u"☃r",u"⛄":u"ûmp", u"〶":u"ód☃l"}
 
-VOWELS=u"āâēêəīîōôóūûʊ"  # 13
-CONS=u"bdfghjklmnprstvwyzʒᵲʧñʃθð"  # 26
+VOWELS=u"óûôēō"
+CONS=u"bmfdgwptʃθshrjklnz"  # 26
 
 
-def to_galbraithanese(word):
+def to_tubish():
     global VOWELS
     global CONS
     global SUBS
-    try:
-        word=unicode(word.lower())
-    except:
-        word=word.lower()
-    word=word.replace("ch",u"ʧ")
-    if random.random()>.5:
-        word=word.replace("c","k")
+    vcount=random.randint(1,25)
+    if vcount<=7:
+        word=random.choice(u"〶⛄▗▘▛óēō")
+        vcount=True
     else:
-        word=word.replace("c","s")
-    if random.random()>.5:
-        word=word.replace("sh",u"ʒ")
-    else:
-        word=word.replace("sh",u"ʃ")
-    if random.random()>.5:
-        word=word.replace("n",u"ñ")
-    if random.random()>.5:
-        word=word.replace("th",u"θ")
-    else:
-        word=word.replace("th",u"ð")
-    if random.random()>.5:
-        word=word.replace("r",u"ᵲ")
-    word=word.replace("q","kw")
-    word=word.replace("x","ks")
-    
-    if random.random()>.5:
-        word=word.replace("a",u"ā")
-    else:
-        word=word.replace("a",u"â")
-    if random.random()>.333:
-        word=word.replace("e",u"ē")
-    elif random.random()>.5:
-        word=word.replace("e",u"ê")
-    else:
-        word=word.replace("e",u"ə")
-    if random.random()>.5:
-        word=word.replace("i",u"ī")
-    else:
-        word=word.replace("i",u"î")
-    if random.random()>.5:
-        word=word.replace("oo",u"ó")
-    else:
-        word=word.replace("oo",u"î")
-    if random.random()>.5:
-        word=word.replace("o",u"ʊ")
-    else:
-        word=word.replace("o",u"ô")
-    if random.random()>.5:
-        word=word.replace("u",u"ū")
-    else:
-        word=word.replace("u",u"û")
-        
-    for item in SUBS:
-        word=word.replace(SUBS[item], item)
-        
-    addedvowels=""
-    addedcons=""
-    for letter in word:
-        if letter in VOWELS:
-            addedvowels+=letter*3
-        elif letter in CONS+"".join(list(SUBS)):
-            addedcons+=letter*3
+        word=random.choice(CONS)
+        vcount=False
+    length=random.randint(1,100)
+    p=[5, 30, 50, 80, 90, 100]
+    for x in range(6):
+        if length<=p[x]:
+            length=x+1
+            break
+    vcsub=False
+    for x in range(length):
+        if vcsub:
+            vcsub=False
+            vcount=not vcount
+            continue
+        if vcount:
+            nl=random.randint(1,42)
+            if nl<=4:
+                vcsub=True
+                word+=random.choice(VCSUBS.keys())
+            else:
+                word+=random.choice("".join(map(unicode, MIDDLESUBS))+CONS)
         else:
-            try:
-                warnings.warn(u"Unknown letter \'"+letter+"\'!")
-            except:
-                warnings.warn(u"Unknown letter!")
-    
-    length=random.randint(7,9)
-    if length==6 and random.random()<.5:
-        upbound=.3
-        length-=1
-        while length!=1:
-            if random.random()>upbound:
-                break
-            length-=1
-            upbound/=9
-    elif length==8:
-        upbound=.5
-        while True:
-            if random.random()>upbound:
-                break
-            length+=1
-            upbound/=2
-    length=(length+len(word))/2
-    v=not length%2
-    if v and random.random()<0.7 and length>1:
-        length+=random.choice([-1,1])
-        v=not v
-    elif v and length>1:
-        length+=random.choice([-1,1])
 
+            word+=random.choice(VOWELS)
+        vcount=not vcount
+    word=word[::-1]
+    part=""
+    if random.randint(1, 100)<=15 and len(word)<=4:
+        if vcount:
+            part=random.choice("".join(map(unicode, MIDDLESUBS))+CONS)+word[1:]
+        else:
+            part=random.choice("".join(map(unicode, MIDDLESUBS))+CONS)+word
+    total=word+part
     output=""
-    while length>0:
-        if v:
-            output+=random.choice(VOWELS+addedvowels)
+    for let in total:
+        if let in MIDDLESUBS:
+            output+=MIDDLESUBS[let]
+        elif let in VCSUBS:
+            output+=VCSUBS[let]
+        elif let in ENDSUBS:
+            output+=ENDSUBS[let]
         else:
-            output+=random.choice(CONS+"".join(list(SUBS))+addedcons)
-        length-=1
-        v=not v
-
-    for item in SUBS:
-        output=output.replace(item, SUBS[item])
+            output+=let
     return output
-
     
 
 
 class Translation:
     def __init__(self):
-        try:
-            open("ignore.txt")
-        except:
-            if open("Tubbish_word.py").read()!=urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Translation/master/Tubbish_word.py").read():
-                i=raw_input("Your code is not up to date!\nWould you like to download the new one?\n(y/n)")
-                if i=="y":
-                    backup=open("Tubbish_word.py").read()
-                    try:
-                        x=open("Tubbish_word.py","r+")
-                        x.truncate(0)
-                        x.write(urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Translation/master/Tubbish_word.py").read())
-                        x.close()
-                        print "Restart successful, please quit Python and reopen your file."
-                    except:
-                        warnings.warn("Update failed, will now try to revert to original.")
-                        try:
-                            x=open("Tubbish_word.py","r+")
-                            x.truncate(0)
-                            x.write(backup)
-                            x.close()
-                            print "Reverted successfully.  Remember: It is still not updated, contact Chase or try again."
-                        except:
-                            warnings.warn("Reverted unsuccessfully.  Will now try to update on another file!")
-                            try:
-                                x=open("Tubbish_word.py","r+")
-                                x.truncate(0)
-                                x.write("raise MemoryError(\"Corrupted File!\")")
-                                x.close()
-                            except:
-                                try:
-                                    x=open("Tubbish_word.py","r+")
-                                    x.truncate(0)
-                                    x.close()
-                                except:
-                                    warnings.warn("Wow this file is really messed up!")
-                            try:
-                                urllib.urlretrieve("https://raw.githubusercontent.com/chasehult/Translation/master/Tubbish_word.py", "Newfile.py")
-                                print "Update sort of worked, delete this file and rename Newfile.py to Tubbish_word.py"
-                            except:
-                                warnings.warn("Update on new file failed, now trying to backup on new file!")
-                                try:
-                                    n=open("Newfile.py", "w")
-                                    n.write(backup)
-                                    n.close()
-                                    print "Backup sort of worked, delete this file and rename Newfile.py to Tubbish_word.py.   Remember: It is still not updated, contact Chase or try again."
-                                except:
-                                    warnings.warn("Nothing works, please contact Chase now.")
-                                    raise IOError("Error. "*12)
-                                   
-        self.words=open("/usr/share/dict/words")
-        try:
-            self.trans=open("Translation.txt", "r+")
-        except:
-            urllib.urlretrieve("https://raw.githubusercontent.com/chasehult/Translation/master/Translation.txt", "Translation.txt")
-            self.trans=open("Translation.txt", "r+")
-        self.trans2=urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Translation/master/Translation.txt")
-        self.dictionary={}
-        try:
-            try:
-                open("ignore.txt")
-                self.readfromfile()
-            except:
-                if self.trans.read()!=self.trans2.read():
-                    self.trans.close()
-                    self.trans=open("Translation.txt", "r+")
-                    self.trans2.close()
-                    self.trans2=urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Translation/master/Translation.txt")
-                    x=raw_input("Your translation document is different than the one on the web.  Would you like to read from the online one?  (y/n)")
-                    if x=="y":
-                        self.readfromdoc()
-                        x=raw_input("Would you like to update your translation file?")
-                        if x=="y":
-                            self.save()
-                    else:
-                        self.readfromfile()
-                self.trans.close()
-                self.trans=open("Translation.txt", "r+")
-                self.trans2.close()
-                self.trans2=urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Translation/master/Translation.txt")
-        except ValueError:
-            warnings.warn("Could not read from doc!")
-            self.readfromfile()
-        self.trans.close()
         self.trans=open("Translation.txt", "r+")
-        self.trans2.close()
         self.trans2=urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Translation/master/Translation.txt")
 
 
