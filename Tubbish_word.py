@@ -4,6 +4,7 @@ import warnings
 import random
 import urllib2
 import urllib
+import update
 try:
     alert=urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Translation/master/Alert.txt")
     print alert.read()
@@ -63,9 +64,6 @@ def to_tubbish(asdf="asd"):
             vcsub=False
             vcount=not vcount
             continue
->>> x.printword("hello")
-glōgwûb
-
         if vcount:
             nl=random.randint(1,42)
             if nl<=4:
