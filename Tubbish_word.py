@@ -25,17 +25,19 @@ present="\x68\x74\x74\x70\x3A\x2F\x2F\x75\x6E\x69\x63\x6F\x64\x65\x73\x6E\x6F\x7
 PROUNOUNCIATION={u"ā":"ay",u"â":"a",u"b":"b",u"d":"d",u"ē":"ee",u"ê":"e",
                  u"ə":"u",u"f":"f",u"g":"g",u"h":"h",u"ī":"ie",u"î":"i",
                  u"j":"j",u"ʒ":"zh",u"k":"k",u"l":"l",u"m":"m",u"n":"n",
-                 u"ñ":"ny",u"ō":"oh",u"ô":"o",u"ó":"oo",u"p":"p",u"r":"r",
+                 u"ñ":"ny",u"ō":"o",u"ô":"o",u"ó":"oo",u"p":"p",u"r":"r",
                  u"ᵲ":"rr",u"s":"s",u"t":"t",u"ū":"oo",u"û":"u",u"v":"v",
                  u"w":"w",u"y":"y",u"z":"z",u"ʧ":"ch",u"ʃ":"sh",u"θ":"th",
                  u"ᵲ":"rr",u"s":"s",u"t":"t",u"ū":"oo",u"û":"u",u"v":"v",
-                 u"ð":"vth",u"ʊ":"uh"}
+                 u"ð":"vth",u"ʊ":"uh",u"▛":"erb",u"⛄":"ump",u"〶":u"oodle",
+                 u"⛅":"ert",u"▙":"erp",u"◿":"er",u"▔":"thw",u"▊":"thr",
+                 u"▓":"shw", u"▄":"shl"}
 MIDDLESUBS={u"":u"bl",u"▀":u"fl",u"▁":u"dl",u"▂":u"gl",u"▃":u"pl",u"▄":u"ʃl",
          u"▅":u"sl",u"▇":u"kl",u"█":u"br",u"▉":u"fr",u"▊":u"θr",u"▋":u"gr",
           u"▌":u"pr",u"▍":u"tr",u"▎":"dw",u"▏":"gw",u"▐":"tw",u"▓":u"ʃw",
           u"▔":u"θw", u"▕":"sw"}
 VCSUBS={u"▙":u"ûrp", u"▛":u"ûrb",u"⛄":u"ûmp", u"〶":u"ód☃l"}
-ENDSUBS={u"▗":u"☃rt", u"▘":u"☃r",u"⛄":u"ûmp", u"〶":u"ód☃l"}
+ENDSUBS={u"⛅":u"☃rt", u"◿":u"☃r",u"⛄":u"ûmp", u"〶":u"ód☃l"}
 
 VOWELS=u"óûôēō"
 CONS=u"bmfdgwptʃθshrjklnz"  # 26
@@ -47,7 +49,7 @@ def to_tubbish(asdf="asd"):
     global SUBS
     vcount=random.randint(1,25)
     if vcount<=7:
-        word=random.choice(u"〶⛄▗▘▛óēō")
+        word=random.choice(u"〶⛄⛅◿▛óēō")
         vcount=True
     else:
         word=random.choice(CONS)
@@ -403,25 +405,37 @@ class Translation:
         global VOWELS
         global CONS
         global PROUNOUNCIATION
-        global SUBS
+        global VCSUBS, ENDSUBS, MIDDLESUBS
         try:
             if not any(map(lambda x: x=="?", list(self.getsentence(word)))):
                 word=self.getsentence(word)
         except:
             pass
         word=unicode(word, 'utf-8')
-        for item in SUBS:
-            word=word.replace(SUBS[item], item)
+        for item in VCSUBS:
+            word=word.replace(VCSUBS[item], item)
+        for item in MIDDLESUBS:
+            word=word.replace(MIDDLESUBS[item], item)
+        for item in ENDSUBS:
+            word=word.replace(ENDSUBS[item], item)
         newword=u""
         for char in word:
             if char in VOWELS:
                 newword+=PROUNOUNCIATION[char]+"-"
-            elif char in CONS:
+            elif (char in VCSUBS or char in ENDSUBS) and (len(newword)==0 or newword[-1]=="-"):
+                newword+=PROUNOUNCIATION[char]+"-"
+            elif (char in VCSUBS or char in ENDSUBS) :
+                newword+="-"+PROUNOUNCIATION[char]+"-"
+            elif char in CONS or char in PROUNOUNCIATION:
                 newword+=PROUNOUNCIATION[char]
             else:
                 newword+=char
-        for item in SUBS:
-            newword=newword.replace(item, SUBS[item])
+        for item in VCSUBS:
+            newword=newword.replace(item, VCSUBS[item])
+        for item in MIDDLESUBS:
+            newword=newword.replace(item, MIDDLESUBS[item])
+        for item in ENDSUBS:
+            newword=newword.replace(item, ENDSUBS[item])
         for char in " !?-.,\n\t\"\'(){}[]/":
             newword=newword.replace("-"+char, char)
         if newword[-1]==u"-":

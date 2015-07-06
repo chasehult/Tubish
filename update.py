@@ -19,6 +19,7 @@ def update():
     try:
         x=open("ignore.txt")
         print "Hello, Chase"
+        return False
     except:
         pass
     try:
@@ -65,7 +66,7 @@ def update():
             this.close()
             this2.close()
     return True
-print update()
+update()
 print "Done updating"
 
         
