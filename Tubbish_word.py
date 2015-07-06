@@ -6,7 +6,7 @@ import urllib2
 import urllib
 import update
 try:
-    alert=urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Translation/master/Alert.txt")
+    alert=urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Tubish/master/Alert.txt")
     print alert.read()
 except:
     pass
@@ -55,7 +55,7 @@ def to_tubbish(asdf="asd"):
         word=random.choice(CONS)
         vcount=False
     length=random.randint(1,100)
-    p=[5, 30, 50, 80, 90, 100]
+    p=[5, 30]#, 50, 80, 90, 100]
     for x in range(6):
         if length<=p[x]:
             length=x+1
