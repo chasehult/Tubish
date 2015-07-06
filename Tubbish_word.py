@@ -16,7 +16,8 @@ except:
     urllib.urlretrieve("https://raw.githubusercontent.com/chasehult/Translation/master/Numbers.py", "Numbers.py")
     import Numbers
 
-
+import datetime
+tubbishbirthday=datetime.date(2015, 7, 5)
 present="\x68\x74\x74\x70\x3A\x2F\x2F\x75\x6E\x69\x63\x6F\x64\x65\x73\x6E\x6F\x77\x6D\x61\x6E\x66\x6F\x72\x79\x6F\x75\x2E\x63\x6F\x6D"
 
 
@@ -39,7 +40,7 @@ VOWELS=u"óûôēō"
 CONS=u"bmfdgwptʃθshrjklnz"  # 26
 
 
-def to_tubish():
+def to_tubbish(asdf="asd"):
     global VOWELS
     global CONS
     global SUBS
@@ -62,6 +63,9 @@ def to_tubish():
             vcsub=False
             vcount=not vcount
             continue
+>>> x.printword("hello")
+glōgwûb
+
         if vcount:
             nl=random.randint(1,42)
             if nl<=4:
@@ -76,10 +80,10 @@ def to_tubish():
     word=word[::-1]
     part=""
     if random.randint(1, 100)<=15 and len(word)<=4:
-        if vcount:
-            part=random.choice("".join(map(unicode, MIDDLESUBS))+CONS)+word[1:]
-        else:
+        if word[0] in u"óûôēō":
             part=random.choice("".join(map(unicode, MIDDLESUBS))+CONS)+word
+        else:
+            part=random.choice("".join(map(unicode, MIDDLESUBS))+CONS)+word[1:]
     total=word+part
     output=""
     for let in total:
@@ -97,8 +101,10 @@ def to_tubish():
 
 class Translation:
     def __init__(self):
+        self.dictionary={}
         self.trans=open("Translation.txt", "r+")
         self.trans2=urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Translation/master/Translation.txt")
+        self.readfromfile()
 
 
 
@@ -143,7 +149,7 @@ class Translation:
     def readfromdoc(self):
         """Forces the program to read off of the online translation."""
         self.dictionary={}
-        for word in self.trans2.read().split("#######")[1].split():
+        for word in self.trans2.read().split():
             try:
                 self.dictionary[word.split("-")[0]]=word.split("-")[1]
             except:
@@ -154,7 +160,7 @@ class Translation:
     def readfromfile(self):
         """Forces the program to read off of your translation file."""
         self.dictionary={}
-        for word in self.trans.read().split("#######")[1].split():
+        for word in self.trans.read().split():
             try:
                 self.dictionary[word.split("-")[0]]=word.split("-")[1]
             except:
@@ -163,8 +169,8 @@ class Translation:
         self.trans=open("Translation.txt", "r+")
     
     def addword(self,word):
-        """Adds a single english word to the dictionary and its translation is randomly chosen through to_galbraithanese."""
-        self.dictionary[word]=to_galbraithanese(word)
+        """Adds a single english word to the dictionary and its translation is randomly chosen through to_tubbish."""
+        self.dictionary[word]=to_tubbish(word)
 
     def removeword(self,word):
         """Removes a single word from the dictionary, the input word must be in english."""
@@ -173,28 +179,28 @@ class Translation:
     def restart(self):
         """Completely restarts and saves the translation file.  Every thing will be changed.  Also makes sure there are no homonyms.  ASK CHASE BEFORE USING!!"""
         self.trans.truncate(0)
-        self.trans.write("#######\n")
         self.dictionary={}
-        for word in list(set(self.words.read().lower().split("\n"))):
-            translation=to_galbraithanese(word)
+        words=open("/usr/share/dict/words")
+        for word in list(set(words.read().lower().split("\n"))):
+            translation=to_tubbish()
             while translation in self.dictionary.values():
-                translation=to_galbraithanese(word)
+                translation=to_tubbish()
             self.trans.write((word+"-"+translation+"\n").encode('utf8'))
             self.dictionary[word]=translation
             if len(list(self.dictionary))%1000==0:
                 print str(len(list(self.dictionary)))+"/"+str(len(open("/usr/share/dict/words").readlines()))
-        self.trans.write("#######")
         self.trans.close()
         self.trans=open("Translation.txt", "r+")
         self.words=open("/usr/share/dict/words")
 
     def save(self):
         """Saves the current dictionary to the translation file."""
+        self.trans=open("Translation.txt", "r+")
         self.trans.truncate(0)
-        self.trans.write("#######\n")
         for word in self.dictionary:
-            self.trans.write((word+"-"+self.dictionary[word]+"\n"))
-        self.trans.write("#######")
+            written=word+u"-"+self.dictionary[word.encode('utf-8')]+u"\n"
+            self.trans.write(written.encode('utf-8'))
+        self.trans.write(text)
         self.trans.close()
         self.trans=open("Translation.txt", "r+")
         
