@@ -198,9 +198,8 @@ class Translation:
         self.trans=open("Translation.txt", "r+")
         self.trans.truncate(0)
         for word in self.dictionary:
-            written=word+u"-"+self.dictionary[word.encode('utf-8')]+u"\n"
-            self.trans.write(written.encode('utf-8'))
-        self.trans.write(text)
+            written=word+u"-"+self.dictionary[word]+u"\n"
+            self.trans.write(written)
         self.trans.close()
         self.trans=open("Translation.txt", "r+")
         
