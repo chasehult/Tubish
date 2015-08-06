@@ -19,6 +19,23 @@ def update():
     try:
         x=open("ignore.txt")
         print "Hello, Chase"
+        try:
+            trans2=urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Tubish/master/Translation.txt")
+        except:
+            print "Can not connect to internet."
+            return False
+        if trans.read()!=trans2.read():
+            x=raw_input("Your Translation.txt is not up to date!\nWould you like to update? (y/n)\n")
+            if x=="y":
+                trans.close()
+                trans2.close()
+                trans=open("Translation.txt", "r+")
+                trans2=urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Tubish/master/Translation.txt")
+                trans.truncate(0)
+                text=trans2.read().decode('utf-8')
+                trans.write(text.encode('utf-8'))
+                trans.close()
+                trans2.close()
         return False
     except:
         pass

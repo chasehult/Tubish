@@ -178,7 +178,7 @@ class Translation:
 
     def restart(self):
         """Completely restarts and saves the translation file.  Every thing will be changed.  Also makes sure there are no homonyms.  ASK CHASE BEFORE USING!!"""
-        self.trans.truncate(0)
+        self.tranys.truncate(0)
         self.dictionary={}
         words=open("/usr/share/dict/words")
         for word in list(set(words.read().lower().split("\n"))):
@@ -197,9 +197,11 @@ class Translation:
         """Saves the current dictionary to the translation file."""
         self.trans=open("Translation.txt", "r+")
         self.trans.truncate(0)
+        written=""
         for word in self.dictionary:
-            written=word+u"-"+self.dictionary[word]+u"\n"
-            self.trans.write(written)
+            written+=(word+"-"+self.dictionary[word]+"\n")
+            #self.trans.write(written.encode('utf8'))
+        self.trans.write(written)
         self.trans.close()
         self.trans=open("Translation.txt", "r+")
         
