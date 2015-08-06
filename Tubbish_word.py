@@ -55,8 +55,8 @@ def to_tubbish(asdf="asd"):
         word=random.choice(CONS)
         vcount=False
     length=random.randint(1,100)
-    p=[5, 30]#, 50, 80, 90, 100]
-    for x in range(6):
+    p=[60, 100]#[5, 30, 50, 80, 90, 100]
+    for x in range(2):#6):
         if length<=p[x]:
             length=x+1
             break
