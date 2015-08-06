@@ -7,7 +7,7 @@ import urllib
 import update
 try:
     alert=urllib2.urlopen("https://raw.githubusercontent.com/chasehult/Tubish/master/Alert.txt")
-    print alert.read()
+    print random.choice(alert.read().split("\n"))
 except:
     pass
 print "Loading..."
@@ -613,8 +613,6 @@ class Translation:
     
 
 
-r="gâlbrāθənēz"
 x=Translation()
 tr="dətês vîᵲâr, jôʒóñ dûzūm prīfrēg ēgʊkʊ? sótəy ðūplēpr tēwōsm tôpləbr ksūʒūsl wêplîd lūzôgāg. grēskōt ʊdîkrū trôhîθōsnîh hāslākw bróʃîzīkl ksūʒūsl hāslākw yʊglūgēʃîgē klāʃódâʃūr. tûñâfr âwâzōbī, grēskōt ʊdîkrū kwəsnīblîr hêyôklāy ñīnâg Gâlbrāθənēz."
 print "Done"
-
